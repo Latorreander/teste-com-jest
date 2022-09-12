@@ -32,19 +32,62 @@ it("cobra o valor do frete se o valor dos produtos for menor que 500", () => {
   expect(resultado).toBe(120);
 });
 
-it('não cobra o valor do frete quando o valor dos produtos for EXATAMENTE 500', () =>{
-   //ARRANGE
-   const meuPedido = {
-      itens: [
-        { nome: "Armadura de ouro", valor: 500 },
-        { nome: "Entrega", valor: 100, entrega: true },
-      ],
-    };
+it("não cobra o valor do frete quando o valor dos produtos for EXATAMENTE 500", () => {
+  //ARRANGE
+  const meuPedido = {
+    itens: [
+      { nome: "Armadura de ouro", valor: 500 },
+      { nome: "Entrega", valor: 100, entrega: true },
+    ],
+  };
 
-    //ACT
-    const resultado = calcularValorPedido(meuPedido);
+  //ACT
+  const resultado = calcularValorPedido(meuPedido);
 
-    //ASSERT
-    expect(resultado).toBe(500);
+  //ASSERT
+  expect(resultado).toBe(500);
+});
 
-})
+//CASO OS ESTADOS DE ENTREGA SEJAM RS OU SC, DEVE SER ACRESCIDO UM VALOR DE 30% NA ENTREGA
+
+it("deve adicionar um acrescimo de 30% no valor da entrega do pedido caso o estado seja RS", () => {
+  const pedidoComEstadoRS = {
+    estado: "RS",
+    itens: [
+      { nome: "Sanduíche", valor: 400 },
+      { nome: "Entrega", valor: 100, entrega: true },
+    ],
+  };
+
+  const resultado = calcularValorPedido(pedidoComEstadoRS);
+
+  expect(resultado).toBe(530);
+});
+
+it("deve adicionar um acrescimo de 30% no valor da entrega do pedido caso o estado seja SC", () => {
+  const pedidoComEstadoSC = {
+    estado: "SC",
+    itens: [
+      { nome: "Sanduíche", valor: 400 },
+      { nome: "Entrega", valor: 100, entrega: true },
+    ],
+  };
+
+  const resultado = calcularValorPedido(pedidoComEstadoSC);
+
+  expect(resultado).toBe(530);
+});
+
+it(" Não deve adicionar um acrescimo de 30% no valor da entrega do pedido caso o estado seja SP", () => {
+  const pedidoComEstadoSP= {
+    estado: "SP",
+    itens: [
+      { nome: "Sanduíche", valor: 400 },
+      { nome: "Entrega", valor: 100, entrega: true },
+    ],
+  };
+
+  const resultado = calcularValorPedido(pedidoComEstadoSP);
+
+  expect(resultado).toBe(500);
+});
